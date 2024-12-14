@@ -1,0 +1,555 @@
+\doxysection{CN.\+h}
+\hypertarget{_c_n_8h_source}{}\label{_c_n_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CN\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CN\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <numeric>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c_n}{CN}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ std::string\ option;\ }
+\DoxyCodeLine{00023\ \ \ \ \ std::string\ type;\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ S\_0;\ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{double}\ K;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{double}\ Tf;\ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{double}\ T0;\ \ \ \ \ \ \ }
+\DoxyCodeLine{00028\ \ \ \ \ std::vector<std::pair<double,\ double>>\ r;\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{double}\ sigma;\ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{int}\ Nx;\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{int}\ Nt;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{class_c_n_a8566b92badf975e5087fef9aa921bc31}{CN}}(std::string\ op,\ std::string\ type\_,\ \textcolor{keywordtype}{double}\ s0,\ \textcolor{keywordtype}{double}\ k,\ std::vector<std::pair<double,\ double>>\ r\_,\ \textcolor{keywordtype}{double}\ s\_,\ \textcolor{keywordtype}{int}\ nx\ =\ 100,\ \textcolor{keywordtype}{int}\ nt\ =\ 100,\ \textcolor{keywordtype}{double}\ tf\ =\ 1.0,\ \textcolor{keywordtype}{double}\ t0\ =\ 0.0)\ :\ option(op),}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ type(type\_),\ S\_0(s0),\ K(k),\ Tf(tf),\ T0(t0),\ r(r\_),\ sigma(s\_),\ Nx(nx),\ Nt(nt)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (type\_\ !=\ \textcolor{stringliteral}{"{}Call"{}}\ \&\&\ type\_\ !=\ \textcolor{stringliteral}{"{}Put"{}})\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Option\ type\ must\ be\ 'Call'\ or\ 'Put'."{}});}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (op\ !=\ \textcolor{stringliteral}{"{}European"{}}\ \&\&\ op\ !=\ \textcolor{stringliteral}{"{}American"{}})\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Option\ must\ be\ 'European'\ or\ 'American'."{}});}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (s0\ <\ 0\ ||\ k\ <\ 0\ ||\ tf\ <\ 0\ ||\ t0\ <\ 0)\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Variables\ S0,\ K,\ T0\ and\ Tf\ must\ non\ negative."{}});}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t0\ >=\ tf)\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Final\ time\ must\ be\ higher\ than\ initial\ time."{}});}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nx\ ==\ 0\ ||\ nt\ ==\ 0)\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Number\ of\ steps\ of\ both\ price\ and\ time\ must\ be\ positive."{}});}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (s\_\ <=\ 0)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Volatility\ of\ underlying\ asset\ must\ be\ positive."{}});}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::max\_element(r.begin(),\ r.end(),}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ a,\ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ b)\ \{\ return\ a.first\ <\ b.first;\ \})-\/>first\ >\ Tf)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::invalid\_argument(\textcolor{stringliteral}{"{}Risk\ Free\ interest\ rate\ must\ correspond\ to\ maturity."{}});}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ if\ (std::min\_element(r.begin(),\ r.end(),}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ a,\ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ b)\ \{\ return\ a.first\ <\ b.first;\ \})-\/>first\ <\ T0)\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::invalid\_argument(\textcolor{stringliteral}{"{}Risk\ Free\ interest\ rate\ must\ correspond\ to\ computation\ date."{}});}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{class_c_n_a30ab66fef6263aae11fbd8f6934e482a}{\string~CN}}()\ \{\ std::cout\ <<\ \textcolor{stringliteral}{"{}deleted\ data"{}}\ <<\ std::endl;\ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{class_c_n_ae52b03b1b8c3fec9240042cfe0811501}{CN}}(\mbox{\hyperlink{class_c_n}{CN}}\&\ b)\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ option\ =\ b.option;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ type\ =\ b.type;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ S\_0\ =\ b.S\_0;}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ K\ =\ b.K;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ Tf\ =\ b.Tf;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ T0\ =\ b.T0;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ r\ =\ b.r;}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ sigma\ =\ b.sigma;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ Nx\ =\ b.Nx;}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ Nt\ =\ b.Nt;}
+\DoxyCodeLine{00099\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_c_n_a36747db3f4e23e677bacf0de7043783e}{defineRate}}(\textcolor{keywordtype}{double}\ dr\_\ =\ 0)\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ std::vector<double>\ result(Nt,\ 0.0);}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ Nt;\ i++)\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ t\ =\ T0\ +\ i\ *\ dt;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::find\_if(r.begin(),\ r.end(),}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [t](\textcolor{keyword}{const}\ std::pair<double,\ double>\&\ pair)\ \{\ return\ std::abs(pair.first\ -\/\ t)\ <\ 1e-\/9;\ \});}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ r.end())\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ it-\/>second\ +\ dr\_;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ upper\ =\ std::upper\_bound(r.begin(),\ r.end(),\ t,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keywordtype}{double}\ val,\ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pair)\ \{\ return\ val\ <\ pair.first;\ \});}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (upper\ ==\ r.end())\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ std::prev(r.end())-\/>second\ +\ dr\_;;}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (upper\ ==\ r.begin())\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ r.begin()-\/>second\ +\ dr\_;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ lower\ =\ std::prev(upper);}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ x1\ =\ lower-\/>first,\ v1\ =\ lower-\/>second;}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ x2\ =\ upper-\/>first,\ v2\ =\ upper-\/>second;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ dr\_\ +\ v1\ +\ (v2\ -\/\ v1)\ *\ (t\ -\/\ x1)\ /\ (x2\ -\/\ x1);}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00137\ \ \ \ \ \}}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_c_n_a163821b9af89220dee256ed3888c57e5}{solveTridiagonal}}(\textcolor{keyword}{const}\ std::vector<double>\&\ lower,\ \textcolor{keyword}{const}\ std::vector<double>\&\ diag,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<double>\&\ upper,\ \textcolor{keyword}{const}\ std::vector<double>\&\ b,}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ std::vector<double>\&\ result)\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ n\ =\ diag.size();}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ std::vector<double>\ c\_prime(n,\ 0.0);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ std::vector<double>\ d\_prime(n,\ 0.0);}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ result.resize(n);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{comment}{//forward\ step}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ c\_prime[0]\ =\ upper[0]\ /\ diag[0];}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ d\_prime[0]\ =\ b[0]\ /\ diag[0];}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <\ n;\ ++i)\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ m\ =\ diag[i]\ -\/\ lower[i\ -\/\ 1]\ *\ c\_prime[i\ -\/\ 1];}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ c\_prime[i]\ =\ upper[i]\ /\ m;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ d\_prime[i]\ =\ (b[i]\ -\/\ lower[i\ -\/\ 1]\ *\ d\_prime[i\ -\/\ 1])\ /\ m;}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{comment}{//backsubstitution}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ result[n\ -\/\ 1]\ =\ d\_prime[n\ -\/\ 1];}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ n\ -\/\ 2;\ i\ >=\ 0;\ -\/-\/i)\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ d\_prime[i]\ -\/\ c\_prime[i]\ *\ result[i\ +\ 1];}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00167\ \ \ \ \ \}}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_c_n_a2c199ba3af3bdc998fb3c3f7c9b37792}{meanSecondElement}}(\textcolor{keyword}{const}\ std::vector<std::pair<double,\ double>>\&\ vec)\ \{\ \textcolor{comment}{//calculate\ the\ mean\ of\ the\ input\ of\ interest\ rates}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (vec.empty())\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Vector\ is\ empty.\ Cannot\ compute\ mean."{}});}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ sum\ =\ std::accumulate(vec.begin(),\ vec.end(),\ 0.0,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keywordtype}{double}\ acc,\ \textcolor{keyword}{const}\ std::pair<int,\ int>\&\ p)\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ acc\ +\ p.second;}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sum\ /\ vec.size();}
+\DoxyCodeLine{00182\ \ \ \ \ \}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00190\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(\textcolor{keywordtype}{double}\ dP\ =\ 0,\ \textcolor{keywordtype}{double}\ ds\_\ =\ 0,\ \textcolor{keywordtype}{double}\ dr\_\ =\ 0)\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ T\ =\ Tf\ -\/\ T0;\ \textcolor{comment}{//Time\ Frame}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dS\ =\ S\_0\ /\ Nx;\ \textcolor{comment}{//Price\ step}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ T\ /\ Nt;\ \ \textcolor{comment}{//Time\ step}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isCall\ =\ (type\ ==\ \textcolor{stringliteral}{"{}Call"{}});}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isAmerican\ =\ (option\ ==\ \textcolor{stringliteral}{"{}American"{}});}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ std::vector<double>\ R\ =\ \mbox{\hyperlink{class_c_n_a36747db3f4e23e677bacf0de7043783e}{defineRate}}(dr\_);}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ Sigma\ =\ sigma\ +\ ds\_;}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{comment}{//price\ grid}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ std::vector<double>\ S(Nx\ +\ 1);}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ S[i]\ =\ \ i\ *\ dS\ +\ dP;}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ S[i]\ *=\ std::exp(R[0]\ *\ T0);\ \textcolor{comment}{//Assuming\ rate\ is\ constant\ from\ today\ to\ computation\ date}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ V(Nx\ +\ 1,\ std::vector<double>(Nt\ +\ 1,\ 0.0));}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{comment}{//maturity\ payoff}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ V[i][Nt]\ =\ isCall\ ?\ std::max(S[i]\ -\/\ K,\ 0.0)\ :\ std::max(K\ -\/\ S[i],\ 0.0);}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ V[i][Nt]\ *=\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(R,\ T0,\ Tf));}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Boundary\ conditions-\/\ Dirichlet}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ std::vector<double>\ subvec;\ \textcolor{comment}{//\ je\ comprends\ pas\ pourquoi\ vous\ aimez\ autant\ cette\ langue\ }}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ t\ =\ 0;\ t\ <\ Nt;\ t++)\ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ subvec.clear();}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ std::copy(R.begin(),\ R.begin()\ +\ t,\ std::back\_inserter(subvec));}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ V[0][t]\ =\ isCall\ ?\ 0.0\ :\ std::max(K\ -\/\ S[0],\ 0.0)\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec,\ 0,\ t\ *\ dt));}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ V[Nx][t]\ =\ isCall\ ?\ std::max(S[Nx]\ -\/\ K,\ 0.0)\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec,\ 0,\ t\ *\ dt))\ :\ 0.0;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Coefficient\ for\ the\ CN\ scheme}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ std::vector<double>\ alpha(Nx\ +\ 1),\ beta(Nx\ +\ 1),\ \mbox{\hyperlink{class_c_n_a8e2e919fc59d6e27eeeaf08758530ac4}{gamma}}(Nx\ +\ 1);}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Tridiagonal\ matrix\ component}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ std::vector<double>\ lower(Nx\ -\/\ 1),\ main(Nx\ -\/\ 1),\ upper(Nx\ -\/\ 1);}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Time\ step}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ t\ =\ Nt\ -\/\ 1;\ t\ >=\ 0;\ -\/-\/t)\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ ++i)\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ alpha[i]\ =\ 0.25\ *\ dt\ *\ (Sigma\ *\ Sigma\ *\ (S[i]\ *\ S[i])/\ dS*dS\ -\/\ R[t]\ *\ S[i]/dS);}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ beta[i]\ =\ -\/0.5\ *\ dt\ *\ (Sigma\ *\ Sigma\ *\ (S[i]\ *\ S[i])\ /\ dS\ *\ dS\ +\ R[t]);}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c_n_a8e2e919fc59d6e27eeeaf08758530ac4}{gamma}}[i]\ =\ 0.25\ *\ dt\ *\ (Sigma\ *\ Sigma\ *\ (S[i]\ *\ S[i])\ /\ dS\ *\ dS\ +\ R[t]\ *\ S[i]/dS);}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ Nx\ -\/\ 1;\ ++i)\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lower[i]\ =\ -\/alpha[i\ +\ 2];}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ main[i]\ =\ 1.0\ -\/\ beta[i\ +\ 1];}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upper[i]\ =\ -\/\mbox{\hyperlink{class_c_n_a8e2e919fc59d6e27eeeaf08758530ac4}{gamma}}[i\ +\ 1];}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Boundary\ adjustments}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<double>\ b(Nx\ -\/\ 1,\ 0.0);}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ b[0]\ =\ alpha[1]\ *\ (V[0][t]\ +\ V[0][t\ +\ 1])\ -\/\ alpha[0]\ *\ V[0][t\ +\ 1];}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ b[Nx\ -\/\ 2]\ =\ \mbox{\hyperlink{class_c_n_a8e2e919fc59d6e27eeeaf08758530ac4}{gamma}}[Nx\ -\/\ 1]\ *\ (V[Nx][t]\ +\ V[Nx][t\ +\ 1]);}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <\ Nx;\ ++i)\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ b[i\ -\/\ 1]\ +=\ (1.0\ +\ beta[i])\ *\ V[i][t\ +\ 1];}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Solution}}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<double>\ solution;}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c_n_a163821b9af89220dee256ed3888c57e5}{solveTridiagonal}}(lower,\ main,\ upper,\ b,\ solution);}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Update\ and\ account\ for\ American\ Options}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ subvec.clear();}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ std::copy(R.begin(),\ R.begin()\ +\ t,\ std::back\_inserter(subvec));}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V[i][t]\ =\ solution[i\ -\/\ 1];}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isAmerican)\ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V[i][t]\ =\ std::max(V[i][t],\ isCall\ ?\ std::max(S[i]\ -\/\ K,\ 0.0)\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec,\ 0,\ t\ *\ dt))\ :\ std::max(K\ -\/\ S[i],\ 0.0)\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec,\ 0,\ t\ *\ dt)));}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ V;}
+\DoxyCodeLine{00271\ \ \ \ \ \}}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_c_n_afa7e24e4fa0ffe3b64e662858d161d01}{solve\_and\_save}}()\ \{}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dS\ =\ S\_0\ /\ Nx;\ \textcolor{comment}{//price\ step}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ std::vector<double>\ R\ =\ \mbox{\hyperlink{class_c_n_a36747db3f4e23e677bacf0de7043783e}{defineRate}}();}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ V\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ std::vector<double>\ S(Nx\ +\ 1);}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ ++i)\ \{}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ S[i]\ =\ \ i\ *\ dS;}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ S[i]\ *=\ std::exp(R[0]\ *\ T0);\ \textcolor{comment}{//assume\ rate\ is\ constant\ from\ today\ to\ computation\ date}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ std::ofstream\ output(\textcolor{stringliteral}{"{}black\_scholes\_solution.csv"{}});}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!output.is\_open())\ \{}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error:\ Could\ not\ open\ file\ for\ writing."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ output\ <<\ \textcolor{stringliteral}{"{}Stock\ Price"{}};}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ t\ =\ 0;\ t\ <\ V[0].size();\ ++t)\ \{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ output\ <<\ \textcolor{stringliteral}{"{},Timestep\_"{}}\ <<\ t;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ output\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \textcolor{comment}{//option\ price\ for\ each\ stock\ price}}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ S.size();\ ++i)\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ output\ <<\ S[Nx\ -\/\ i];}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ t\ =\ 0;\ t\ <\ V[i].size();\ ++t)\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ output\ <<\ \textcolor{stringliteral}{"{},"{}}\ <<\ V[i][t];}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ output\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ output.close();}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Results\ saved."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \}}
+\DoxyCodeLine{00310\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_c_n_a83fc9e231dfecbac928a68c567acd5ba}{OptionPrice\_At}}(\textcolor{keywordtype}{double}\ t\ =\ 0)\ \{\ }
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ <\ 0\ ||\ t>Tf)\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Date\ cannot\ be\ before\ computation\ date\ or\ after\ maturity."{}};}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ ==\ 0)\ \{\}}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ std::round((t\ -\/\ T0)\ /\ dt);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ std::vector<double>\ result(Nx\ +\ 1);}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ target\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ target[i][index];}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00323\ \ \ \ \ \}}
+\DoxyCodeLine{00328\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_c_n_ae2de654b6f46a7b50d2bb36aeb7a0d20}{Delta\_At}}(\textcolor{keywordtype}{double}\ t\ =\ 0,\ \textcolor{keywordtype}{double}\ dP\ =\ 0.5)\ \{\ \textcolor{comment}{//use\ this\ for\ delta\ at\ t}}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ <\ 0\ ||\ t>Tf)\ \{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Date\ cannot\ be\ before\ computation\ date\ or\ after\ maturity."{}};}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ ==\ 0)\ \{\}}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ std::round((t\ -\/\ T0)\ /\ dt);}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ std::vector<double>\ result(Nx);}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ target\ =\ \mbox{\hyperlink{class_c_n_a6ee669acba88db151432cbd4a9dd824a}{delta}}(dP);}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ target[i][index];}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00341\ \ \ \ \ \}}
+\DoxyCodeLine{00346\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_c_n_a62a22d7ade61cf4c5449a2ade1e090ad}{Gamma\_At}}(\textcolor{keywordtype}{double}\ t\ =\ 0,\ \textcolor{keywordtype}{double}\ dP\ =\ 0.5)\ \{\ \textcolor{comment}{//use\ this\ for\ gamma\ at\ t}}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ <\ 0\ ||\ t>Tf)\ \{}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Date\ cannot\ be\ before\ computation\ date\ or\ after\ maturity."{}};}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ ==\ 0)\ \{\}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ std::round((t\ -\/\ T0)\ /\ dt);}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ std::vector<double>\ result(Nx\ -\/\ 1);}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ target\ =\ \mbox{\hyperlink{class_c_n_a8e2e919fc59d6e27eeeaf08758530ac4}{gamma}}(dP);}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ Nx\ -\/\ 1;\ i++)\ \{}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ target[i][index];}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00359\ \ \ \ \ \}}
+\DoxyCodeLine{00364\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_c_n_a080d5432e1347013a21a9876968fa88e}{Rho\_At}}(\textcolor{keywordtype}{double}\ t\ =\ 0,\ \textcolor{keywordtype}{double}\ dr\_\ =\ 0.01)\ \{\ \textcolor{comment}{//use\ this\ for\ rho\ at\ t}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ <\ 0\ ||\ t>Tf)\ \{}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Date\ cannot\ be\ before\ computation\ date\ or\ after\ maturity."{}};}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ ==\ 0)\ \{\}}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ std::round((t\ -\/\ T0)\ /\ dt);}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ std::vector<double>\ result(Nx\ +\ 1);}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ target\ =\ \mbox{\hyperlink{class_c_n_a93b34c36803ce0769ac3bbe2fb3d0887}{rho}}(dr\_);}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ target[i][index];}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00377\ \ \ \ \ \}}
+\DoxyCodeLine{00382\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_c_n_a3c8c261b0c1430762a67e5baf1883d58}{Vega\_At}}(\textcolor{keywordtype}{double}\ t\ =\ 0,\ \textcolor{keywordtype}{double}\ ds\_\ =\ 0.1)\ \{\ \textcolor{comment}{//use\ this\ for\ vega\ at\ t}}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ <\ 0\ ||\ t>Tf)\ \{}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Date\ cannot\ be\ before\ computation\ date\ or\ after\ maturity."{}};}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ ==\ 0)\ \{\}}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ std::round((t\ -\/\ T0)\ /\ dt);}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ std::vector<double>\ result(Nx\ +\ 1);}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ target\ =\ \mbox{\hyperlink{class_c_n_aff38209c083f07a7c84ecea1925ec1fa}{vega}}(ds\_);}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ target[i][index];}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00395\ \ \ \ \ \}}
+\DoxyCodeLine{00400\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_c_n_aa406441378a991143824ec41e75e3868}{Theta\_At}}(\textcolor{keywordtype}{double}\ t\ =\ 0)\ \{\ \textcolor{comment}{//use\ this\ for\ theta\ at\ t}}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ <\ 0\ ||\ t>Tf)\ \{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Date\ cannot\ be\ before\ computation\ date\ or\ after\ maturity."{}};}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ ==\ 0)\ \{\}}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ std::round((t\ -\/\ T0)\ /\ dt);}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ std::vector<double>\ result(Nx\ +\ 1);}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ target\ =\ \mbox{\hyperlink{class_c_n_a8aec097efeeb5da1031f9ea456e34822}{theta}}();}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ result[i]\ =\ target[i][index\ +\ 1];}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00413\ \ \ \ \ \}}
+\DoxyCodeLine{00417\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_c_n_a3c76e9529ee2eba9d540694acfd7b9bb}{normCdf}}(\textcolor{keywordtype}{double}\ x)\ \{}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0.5\ *\ (1.0\ +\ erf(x\ /\ sqrt(2.0)));}
+\DoxyCodeLine{00419\ \ \ \ \ \}}
+\DoxyCodeLine{00425\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(\textcolor{keyword}{const}\ std::vector<double>\&\ f,\ \textcolor{keywordtype}{double}\ a,\ \textcolor{keywordtype}{double}\ b)\ \{}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ n\ =\ f.size()\ -\/\ 1;}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ <=\ 0)\ \{}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0.0;}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ h\ =\ (b\ -\/\ a)\ /\ n;\ \textcolor{comment}{//size}}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ integral\ =\ 0.0;}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ n;\ i++)\ \{}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ integral\ +=\ (f[i]\ +\ f[i\ +\ 1])\ *\ h\ /\ 2.0;}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ integral;}
+\DoxyCodeLine{00438\ \ \ \ \ \}}
+\DoxyCodeLine{00443\ \ \ \ \ std::string\ \mbox{\hyperlink{class_c_n_a254417f9c348f3c915499b69809109f8}{validate}}()\ \{\ }
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ std::vector<double>\ d1(Nx\ +\ 1);}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ std::vector<double>\ d2(Nx\ +\ 1);}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ T\ =\ (Tf\ -\/\ T0);\ \textcolor{comment}{//in\ years}}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dS\ =\ S\_0\ /\ Nx;\ \textcolor{comment}{//price\ step}}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ T\ /\ Nt;\ \ \textcolor{comment}{//time\ step}}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isCall\ =\ (type\ ==\ \textcolor{stringliteral}{"{}Call"{}});}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isAmerican\ =\ (option\ ==\ \textcolor{stringliteral}{"{}American"{}});}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ std::vector<double>\ R\ =\ \mbox{\hyperlink{class_c_n_a36747db3f4e23e677bacf0de7043783e}{defineRate}}();}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ target\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mean\ =\ 0;\ \textcolor{comment}{//For\ MAE}}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ flags\ =\ 0;\ \textcolor{comment}{//For\ finding\ how\ mnay\ points\ have\ high\ error}}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ std::vector<double>\ S(Nx\ +\ 1);\ \textcolor{comment}{//price\ today}}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ ++i)\ \{}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ S[i]\ =\ i\ *\ dS;}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ S[i]\ *=\ std::exp(R[0]\ *\ T0);\ \textcolor{comment}{//compound\ for\ computation\ date}}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ V(Nx\ +\ 1,\ std::vector<double>(Nt\ +\ 1,\ 0.0));}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \textcolor{comment}{//maturity\ payoff}}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ ++i)\ \{}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ V[i][Nt]\ =\ isCall\ ?\ std::max(S[i]\ -\/\ K,\ 0.0)\ :\ std::max(K\ -\/\ S[i],\ 0.0);}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ V[i][Nt]\ *=\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(R,\ T0,\ Tf));}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ mean\ +=\ std::fabs(V[i][Nt]\ -\/\ target[i][Nt]);}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ flags\ =\ (std::fabs(V[i][Nt]\ -\/\ target[i][Nt])\ >\ std::max(0.01*V[i][Nt],\ 1e-\/9))\ ?\ flags\ +\ 1\ :\ flags;}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \textcolor{comment}{//today\ payoff}}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ ++i)\ \{}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ V[i][0]\ =\ isCall\ ?\ std::max(S[i]\ -\/\ K,\ 0.0)\ :\ std::max(K\ -\/\ S[i],\ 0.0);}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ mean\ +=\ std::fabs(V[i][0]\ -\/\ target[i][0]);}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ flags\ =\ (std::fabs(V[i][0]\ -\/\ target[i][0])\ >\ std::max(0.05\ *\ V[i][0],\ 1e-\/9))\ ?\ flags\ +\ 1\ :\ flags;}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00474\ }
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ std::vector<double>\ subvec\_1;}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ std::vector<double>\ subvec;}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ t\ =\ Nt\ -\/\ 1;\ t\ >=\ 1;\ -\/-\/t)\ \{}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ time\ =\ t\ *\ dt;}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ subvec.clear();}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ std::copy(R.begin()\ +\ t,\ R.end(),\ std::back\_inserter(subvec));}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ subvec\_1.clear();}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ std::copy(R.begin(),\ R.begin()\ +\ t,\ std::back\_inserter(subvec\_1));}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d1[i]\ =\ (1\ /\ (sigma\ *\ sqrt(T-\/time)))\ *\ (std::log(S[i]\ /\ K)\ +\ \mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec,\ time,\ T)\ +\ (sigma\ /\ 2)\ *\ (T-\/time));}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d2[i]\ =\ d1[i]\ -\/\ sigma\ *\ sqrt(T-\/time);}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V[i][t]\ =\ isCall\ ?\ \mbox{\hyperlink{class_c_n_a3c76e9529ee2eba9d540694acfd7b9bb}{normCdf}}(d1[i])\ *\ S[i]\ -\/\ \mbox{\hyperlink{class_c_n_a3c76e9529ee2eba9d540694acfd7b9bb}{normCdf}}(d2[i])\ *\ K\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec,\ time,T))\ :\ \mbox{\hyperlink{class_c_n_a3c76e9529ee2eba9d540694acfd7b9bb}{normCdf}}(-\/d2[i])\ *\ K\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec,\ time,\ T))\ -\/\ \mbox{\hyperlink{class_c_n_a3c76e9529ee2eba9d540694acfd7b9bb}{normCdf}}(-\/d1[i])\ *\ S[i];}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V[i][t]\ *=\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec\_1,\ 0,\ time));}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//We\ can\ include\ the\ if\ clause\ below\ but\ the\ payoff\ will\ never\ supercede\ the\ value}}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isAmerican)\ \{}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V[i][t]\ =\ std::max(V[i][t],\ isCall\ ?\ std::max(S[i]\ -\/\ K,\ 0.0)\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec\_1,\ 0,\ time))\ :\ std::max(K\ -\/\ S[i],\ 0.0)\ *\ std::exp(-\/\mbox{\hyperlink{class_c_n_a1ef1dbc07c405300d447ed7de631fe09}{trapezoidal}}(subvec\_1,\ 0,\ time)));}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mean\ +=\ std::fabs(V[i][t]\ -\/\ target[i][t]);}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flags\ =\ (std::fabs(V[i][t]\ -\/\ target[i][t])\ >\ std::max(0.05\ *\ V[i][t],\ 1e-\/9))\ ?\ flags\ +\ 1\ :\ flags;}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ subvec\_1.clear();}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ mean\ /=\ (Nx\ +\ 1)\ *\ (Nt\ +\ 1);}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ std::ostringstream\ oss;}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ oss\ <<\ \textcolor{stringliteral}{"{}Mean\ Absolute\ Error\ for\ every\ grid\ point\ is:\ "{}};}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ oss\ <<\ std::fixed\ <<\ std::setprecision(4)\ <<\ mean;}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ oss\ <<\ \textcolor{stringliteral}{"{}Points\ with\ more\ than\ 1\%\ MAE:\ "{}};}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ oss\ <<\ std::fixed\ <<\ flags;}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Validation\ finished"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ oss.str();}
+\DoxyCodeLine{00505\ \ \ \ \ \}}
+\DoxyCodeLine{00509\ \ \ \ \ std::string\ \mbox{\hyperlink{class_c_n_a23ae10d582303ee44b1ac21d0bcfda52}{compare\_eu\_us\_nc}}()\ \{\ }
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::max\_element(r.begin(),\ r.end(),}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ std::pair<double,\ double>\&\ a,\ \textcolor{keyword}{const}\ std::pair<double,\ double>\&\ b)\ \{}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ a.second\ <\ b.second;\ \textcolor{comment}{//Compare\ based\ on\ the\ second\ value}}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ \})-\/>second\ *\ std::min\_element(r.begin(),\ r.end(),}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ std::pair<double,\ double>\&\ a,\ \textcolor{keyword}{const}\ std::pair<double,\ double>\&\ b)\ \{}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ a.second\ <\ b.second;\ \textcolor{comment}{//Compare\ based\ on\ the\ second\ value}}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \})-\/>second\ <\ 0)\ \{}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Warning:\ Risk\ free\ interest\ rate\ must\ have\ the\ same\ sign\ in\ order\ for\ the\ lemma\ to\ hold,and\ for\ European\ and\ American\ option\ of\ the\ same\ type\ to\ have\ identical\ prices."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00518\ }
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_c_n_a2c199ba3af3bdc998fb3c3f7c9b37792}{meanSecondElement}}(r)\ >=\ 0.0)\ \{}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mean\ =\ 0.0;}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//int\ flags\ =\ 0;}}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c_n}{CN}}\ c1(\textcolor{stringliteral}{"{}European"{}},\ \textcolor{stringliteral}{"{}Call"{}},\ S\_0,\ K,\ r,\ sigma,\ Nx,\ Nt,\ Tf,\ T0);}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c_n}{CN}}\ c2(\textcolor{stringliteral}{"{}American"{}},\ \textcolor{stringliteral}{"{}Call"{}},\ S\_0,\ K,\ r,\ sigma,\ Nx,\ Nt,\ Tf,\ T0);}
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ v1\ =\ c1.\mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ v2\ =\ c2.\mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ t\ =\ Nt;\ t\ >=\ 0;\ -\/-\/t)\ \{}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mean\ +=\ std::fabs(v1[i][t]\ -\/\ v2[i][t]);}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00531\ }
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ mean\ /=\ (Nx\ +\ 1)\ *\ (Nt\ +\ 1);}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ std::ostringstream\ oss;}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ oss\ <<\ \textcolor{stringliteral}{"{}Mean\ Absolute\ Error\ for\ every\ grid\ point\ is:\ "{}};}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ oss\ <<\ std::fixed\ <<\ std::setprecision(4)\ <<\ mean;}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Comparison\ finished."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ oss.str();}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ mean\ =\ 0;}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c_n}{CN}}\ c1(\textcolor{stringliteral}{"{}European"{}},\ \textcolor{stringliteral}{"{}Put"{}},\ S\_0,\ K,\ r,\ sigma,\ Nx,\ Nt,\ Tf,\ T0);}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c_n}{CN}}\ c2(\textcolor{stringliteral}{"{}American"{}},\ \textcolor{stringliteral}{"{}Put"{}},\ S\_0,\ K,\ r,\ sigma,\ Nx,\ Nt,\ Tf,\ T0);}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ v1\ =\ c1.\mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ v2\ =\ c2.\mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ t\ =\ Nt;\ t\ >=\ 0;\ -\/-\/t)\ \{}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ Nx;\ i++)\ \{}
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mean\ +=\ std::fabs(v1[i][t]\ -\/\ v2[i][t]);}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ mean\ /=\ (Nx\ +\ 1)\ *\ (Nt\ +\ 1);}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ std::ostringstream\ oss;}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ oss\ <<\ \textcolor{stringliteral}{"{}Mean\ Absolute\ Error\ for\ every\ grid\ point\ is:\ "{}};}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ \ oss\ <<\ std::fixed\ <<\ std::setprecision(4)\ <<\ mean;}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Comparison\ finished."{}}\ <<\ std::endl;}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ oss.str();}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00561\ \ \ \ \ \}}
+\DoxyCodeLine{00565\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{class_c_n_a6ee669acba88db151432cbd4a9dd824a}{delta}}(\textcolor{keywordtype}{double}\ dP=0.5)\ \{}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dS\ =\ dP;}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceUp\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(dP,\ 0.0,\ 0.0);}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceDown\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(-\/dP,\ 0,\ 0);}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ optionPriceUp.size();}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\ =\ optionPriceUp[0].size();}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ result(n,\ std::vector<double>(m,\ 0.0));}
+\DoxyCodeLine{00572\ }
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ (n);\ i++)\ \{}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ (m);\ j++)\ \{}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i][j]\ =\ (optionPriceUp[i][j]\ -\/\ optionPriceDown[i][j])\ /\ 2\ *\ dS;}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00580\ \ \ \ \ \}}
+\DoxyCodeLine{00584\ \ \ \ \ std::vector<std::vector<double>>\ \ \mbox{\hyperlink{class_c_n_a8e2e919fc59d6e27eeeaf08758530ac4}{gamma}}(\textcolor{keywordtype}{double}\ dP=0.5)\ \{}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dS\ =\ dP;}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPrice\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(0.0,\ 0.0,\ 0.0);}
+\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceUp\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(dP,\ 0.0,\ 0.0);}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceDown\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(-\/dP,\ 0.0,\ 0.0);}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ optionPrice.size();}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\ =\ optionPrice[0].size();}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ result(n,\ std::vector<double>(m,\ 0.0));}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 1;\ i\ <\ (n);\ i++)\ \{}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ (m);\ j++)\ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i][j]\ =\ (optionPriceUp[i][j]\ -\/\ 2\ *\ optionPrice[i][j]\ +\ optionPriceDown[i][j])\ /\ (dS\ *\ dS);}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00598\ \ \ \ \ \}}
+\DoxyCodeLine{00602\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{class_c_n_a8aec097efeeb5da1031f9ea456e34822}{theta}}()\ \{}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dt\ =\ (Tf\ -\/\ T0)\ /\ Nt;}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPrice\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}();}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ optionPrice.size();}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\ =\ optionPrice[0].size();}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ result(n,\ std::vector<double>(m\ -\/\ 1,\ 0.0));}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ (n);\ i++)\ \{}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 1;\ j\ <\ (m\ -\/\ 1);\ j++)\ \{}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i][j]\ =\ (optionPrice[i][j\ +\ 1]\ -\/\ optionPrice[i][j])\ /\ (dt);}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00614\ \ \ \ \ \}}
+\DoxyCodeLine{00618\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{class_c_n_a93b34c36803ce0769ac3bbe2fb3d0887}{rho}}(\textcolor{keywordtype}{double}\ dr\ =\ 0.01)\ \{}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dr\ <=\ 0.0)\ \{}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}differencing\ must\ be\ positive\ to\ define\ rho,\ eg.\ 1\ basis\ point\ (0.0001)."{}});}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceUp\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(0.0,\ 0.0,\ dr);}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceDown\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(0.0,\ 0.0,\ -\/dr);}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ optionPriceUp.size();}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\ =\ optionPriceUp[0].size();}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ result(n,\ std::vector<double>(m,\ 0.0));}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ (n);\ i++)\ \{}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ m;\ j++)\ \{}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i][j]\ =\ (optionPriceUp[i][j]\ -\/\ optionPriceDown[i][j])\ /\ (2\ *\ dr);\ \textcolor{comment}{//central\ differencing}}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00633\ \ \ \ \ \}}
+\DoxyCodeLine{00637\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{class_c_n_aff38209c083f07a7c84ecea1925ec1fa}{vega}}(\textcolor{keywordtype}{double}\ dSigma\ =\ 0.1)\ \{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dSigma\ <=\ 0.0)\ \{}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}differencing\ must\ be\ positive\ to\ define\ vega,\ eg.\ 1\ basis\ point\ (0.0001)."{}});}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceUp\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(0.0,\ dSigma,\ 0.0);}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ optionPriceDown\ =\ \mbox{\hyperlink{class_c_n_a874888515c7729a71a57ff5e0ff709ba}{solve}}(0.0,\ -\/dSigma,\ 0.0);}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ optionPriceUp.size();}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\ =\ optionPriceUp[0].size();}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ result(n,\ std::vector<double>(m,\ 0.0));}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ (n);\ i++)\ \{}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ m;\ j++)\ \{}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result[i][j]\ =\ (optionPriceUp[i][j]\ -\/\ optionPriceDown[i][j])\ /\ (2\ *\ dSigma);\ \textcolor{comment}{//central\ differencing}}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00652\ \ \ \ \ \}}
+\DoxyCodeLine{00653\ \ \ \ }
+\DoxyCodeLine{00654\ \};}
+\DoxyCodeLine{00655\ }
+\DoxyCodeLine{00656\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

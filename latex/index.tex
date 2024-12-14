@@ -1,0 +1,72 @@
+\chapter{Crank Nicolson scheme for pricing Vanilla Options}
+\hypertarget{index}{}\label{index}\index{Crank Nicolson scheme for pricing Vanilla Options@{Crank Nicolson scheme for pricing Vanilla Options}}
+This class concerns the simple case of a vanilla option with no dividents. We seperate our options into European or American, Put or Call, and use the Crank Nicolson finite differnecing scheme to approximate the solution the Black Scholes equation. The class can also compute the five basic Greeks of the option (Delta, Gamma, Theta, Rho, and Vega), compare the difference in value between European and American option ceteris paribus, and validate the accuracy of the model using the explicit Black Scholes model. Additionally the class can handle time variant risk free interest rate. By adding at leat one value of the rate in any time point between computation date and maturity, the class will linearly interpolate the rest of the time points.\hypertarget{index_autotoc_md0}{}\doxysubsection{\texorpdfstring{Getting Started}{Getting Started}}\label{index_autotoc_md0}
+Simply include the class header, plus some common libraries, string.\+h, vector.\+h and utility.\+h (for using std\+::pairs).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include<string>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include<utility>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include<vector>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}CN.h"{}}}
+\DoxyCodeLine{\mbox{\hyperlink{class_c_n}{CN}}\ object(...);}
+\DoxyCodeLine{std::vector<std::vector<double>>\ optionPrices\ =\ \textcolor{keywordtype}{object}.solve();}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md1}{}\doxysubsection{\texorpdfstring{Crank Nicolson finite differencing method}{Crank Nicolson finite differencing method}}\label{index_autotoc_md1}
+
+
+The Crank-\/\+Nicholson method is widely used for solving time-\/dependent partial differential equations, particularly the heat equation and diffusion problems. It is an implicit, finite difference method that combines the features of both the forward Euler and backward Euler methods, balancing between stability and accuracy. Its key features are\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries{Unconditional Stability\+:}} The method is stable regardless of time step size.
+\item {\bfseries{Second-\/\+Order Accuracy\+:}} The scheme achieves second-\/order accuracy in both space and time.
+\item {\bfseries{Implicit Time-\/\+Stepping\+:}} Unlike explicit methods, it allows for larger time steps without instability.
+\end{DoxyItemize}
+
+It transforms the partial differential equation into a system of linear equations that can be efficiently solved using a tridiagonal matrix algorithm.
+
+The Black-\/\+Scholes equation is given by\+:   \[
+  \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0,
+  \] where\+:
+\begin{DoxyItemize}
+\item $ V(S, t) $ is the option price as a function of stock price $ S $ and time $ t $.
+\item $ \sigma $ is the volatility.
+\item $ r $ is the risk-\/free interest rate.
+\end{DoxyItemize}
+
+Using the Crank-\/\+Nicolson method, the discretized equation at grid point $ i $ becomes\+:   \[
+  a_i V_{i-1}^{n+1} + b_i V_i^{n+1} + c_i V_{i+1}^{n+1} = d_i,
+  \] where\+:        \begin{align*}
+  a_i &= -\frac{\Delta t}{4} \left( \sigma^2 i^2 - ri \right), \\
+  b_i &= 1 + \frac{\Delta t}{2} \left( \sigma^2 i^2 + r \right), \\
+  c_i &= -\frac{\Delta t}{4} \left( \sigma^2 i^2 + ri \right), \\
+  d_i &= \frac{\Delta t}{4} \left( \sigma^2 i^2 - ri \right) V_{i-1}^n \\
+       &\quad + \left( 1 - \frac{\Delta t}{2} \left( \sigma^2 i^2 + r \right) \right) V_i^n \\
+       &\quad + \frac{\Delta t}{4} \left( \sigma^2 i^2 + ri \right) V_{i+1}^n.
+  \end{align*}
+
+This leads to a tridiagonal matrix system that can be solved efficiently using the Thomas algorithm.
+
+The Option Greeks are calculated using simple forward or central differencing schemes of the options\textquotesingle{}s value over the respective difference or pertrubation.
+
+Advantages\+:
+\begin{DoxyItemize}
+\item Coverges in Error faster than Implicit/\+Explicit method as number of timesteps increases
+\item Suitable for large time step simulations without instability.
+\item Efficient when solved using methods like the Thomas algorithm for tridiagonal systems.
+\end{DoxyItemize}
+
+
+
+Reference for both images \href{https://quintus-zhang.github.io/post/on_pricing_options_with_finite_difference_methods/}{\texttt{ here}}.
+
+See Also\+:
+\begin{DoxyItemize}
+\item \href{https://en.wikipedia.org/wiki/Black\%E2\%80\%93Scholes_equation}{\texttt{ Black-\/\+Scholes Equation}}
+\item \href{https://en.wikipedia.org/wiki/Numerical_methods}{\texttt{ Numerical Methods Overview}}
+\item \href{https://en.wikipedia.org/wiki/Crank\%E2\%80\%93Nicolson_method}{\texttt{ Crank-\/\+Nicolson Method}}
+\item \href{https://shorturl.at/x9uWg}{\texttt{ Option Greeks}}
+\item \href{https://quintus-zhang.github.io/post/on_pricing_options_with_finite_difference_methods/}{\texttt{ On pricing options with finite difference methods}} 
+\end{DoxyItemize}
