@@ -56,7 +56,10 @@
 *      &\quad + \frac{\Delta t}{4} \left( \sigma^2 i^2 + ri \right) V_{i+1}^n.
 * \f}
 *
-* This leads to a tridiagonal matrix system that can be solved efficiently using the Thomas algorithm.
+* This leads to a tridiagonal matrix system that can be solved efficiently using the Thomas algorithm. To ensure stability, the following constraint should be met:
+* \f[
+* dt < \frac{dS^{2}}{2* \sigma^{2} * S_{max} ^{2}}
+* \f]
 * 
 * The Option Greeks are calculated using simple forward or central differencing schemes of the options's value over the respective difference or pertrubation.
 *
