@@ -1,0 +1,2 @@
+A small gradute project calculating the prices of Vanilla options with the Crank Nicolson method. More information can be found on the projects website: https://curious-rugelach-0eaff9.netlify.app/.
+Also deposited is the Excel spreadsheet that performs all the calculations. You will need to access the code however and confirm your directory, since it uses a Shell executable to the C++ file, then reads the results.
